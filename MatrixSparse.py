@@ -9,7 +9,6 @@ class MatrixSparse(Matrix):
 
     def __init__(self, zero):
         self._zero = zero
-        pass
 
     #TODO: Ver como funciona
     @property

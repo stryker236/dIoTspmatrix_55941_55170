@@ -11,13 +11,14 @@ class MatrixSparseDOK(MatrixSparse):
     def __init__(self, zero: float = 0.0):
         if isinstance(zero,(float,int)):
             super().__init__(self,zero)
+            self._items = {}
         raise ValueError
-        
+
     def __copy__(self):
-        pass
+        return {key: value for key, value in self._items.items()}
 
     def __eq__(self, other: MatrixSparseDOK):
-        pass
+        return self._items == other._items
 
     def __iter__(self):
         pass
@@ -26,12 +27,13 @@ class MatrixSparseDOK(MatrixSparse):
         pass
 
     def __getitem__(self, pos: [Position, position]) -> float:
-        pass
+        return self._items[pos]
 
     def __setitem__(self, pos: [Position, position], val: [int, float]):
-        pass
+        self._items[pos] = val
 
     def __len__(self) -> int:
+        return len(self._items)
         pass
 
     def _add_number(self, other: [int, float]) -> Matrix:
