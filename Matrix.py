@@ -2,12 +2,6 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from Position import *
 
-# Teste de pull request da brunch
-# Fetch test
-# Comit 1
-# Comit 2
-# Comit 3
-
 class Matrix(ABC):
 
     @abstractmethod
