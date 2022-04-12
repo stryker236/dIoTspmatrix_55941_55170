@@ -2,7 +2,6 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from ctypes import Union
 from Position import *
-# sou gordos
 
 class Matrix(ABC):
 
