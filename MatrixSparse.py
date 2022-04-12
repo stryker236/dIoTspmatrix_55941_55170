@@ -13,19 +13,21 @@ class MatrixSparse(Matrix):
     #TODO: Ver como funciona
     @property
     def zero(self) -> float:
+        #TODO: RICARDO
         pass
 
     #TODO: Ver como funciona
     @zero.setter
     def zero(self, val: float):
+        #TODO: RICARDO
         pass
 
     @abstractmethod
     def __len__(self) -> int:
         raise NotImplementedError
 
-    #Ser implementada
     def sparsity(self) -> float:
+        #TODO: DIOGO
         pass
 
     @staticmethod

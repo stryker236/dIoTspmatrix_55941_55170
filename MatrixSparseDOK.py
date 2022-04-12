@@ -1,4 +1,5 @@
 from __future__ import annotations
+from ctypes import Union
 from MatrixSparse import *
 from Position import *
 
@@ -21,9 +22,11 @@ class MatrixSparseDOK(MatrixSparse):
         return self._items == other._items
 
     def __iter__(self):
+        #TODO: RUI OU DIOGO
         pass
 
     def __next__(self):
+        #TODO: RUI OU DIOGO
         pass
 
     def __getitem__(self, pos: [Position, position]) -> float:
@@ -36,28 +39,37 @@ class MatrixSparseDOK(MatrixSparse):
         return len(self._items)
         pass
 
-    def _add_number(self, other: [int, float]) -> Matrix:
+    def _add_number(self, other: Union[int, float]) -> Matrix:
+        #TODO:RICARDO
+        #NUMERO PARA TODOS AS POSIÇOES DA MATRIZ
         pass
 
     def _add_matrix(self, other: MatrixSparse) -> MatrixSparse:
+        #TODO:RICARDO
         pass
 
     def _mul_number(self, other: [int, float]) -> Matrix:
+        #TODO:RICARDO
         pass
 
     def _mul_matrix(self, other: MatrixSparse) -> MatrixSparse:
+        #TODO:RUI
         pass
 
     def dim(self) -> tuple[Position, ...]:
+        #TODO: DIOGO
         pass
 
     def row(self, row: int) -> Matrix:
+        #TODO: DIOGO
         pass
 
     def col(self, col: int) -> Matrix:
+        #TODO:DIOGO
         pass
 
     def diagonal(self) -> Matrix:
+        #TODO:DIOGO
         pass
 
     @staticmethod
@@ -65,15 +77,19 @@ class MatrixSparseDOK(MatrixSparse):
         pass
 
     def transpose(self) -> MatrixSparseDOK:
+        #TODO: DIOGO
         pass
 
     def compress(self) -> compressed:
+        #TODO: RUI
         pass
 
     @staticmethod
     def doi(compressed_vector: compressed, pos: Position) -> float:
+        #TODO: RUI
         pass
 
     @staticmethod
     def decompress(compressed_vector: compressed) -> MatrixSparse:
+        #TODO: RUI
         pass
