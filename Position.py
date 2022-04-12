@@ -5,10 +5,13 @@ class Position:
     _pos = tuple[int, int]
 
     def __init__(self, row: int, col: int):
-        pass
+        if isinstance(row,(float,int)) and isinstance(col,(float,int)):
+            if col >= 0 and row >= 0:
+                self._pos = (row,col)
+        raise ValueError
 
     def __str__(self):
-        pass
+        return str(self._pos)
 
     def __repr__(self):
         return str(self._pos)
@@ -17,7 +20,7 @@ class Position:
         return hash(self._pos)
 
     def __getitem__(self, item: int) -> int:
-        pass
+        return self._pos
 
     def __eq__(self, other: Position):
-        pass
+        return self._pos == other._pos

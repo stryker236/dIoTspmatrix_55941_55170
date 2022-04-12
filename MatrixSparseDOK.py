@@ -9,8 +9,10 @@ class MatrixSparseDOK(MatrixSparse):
     _items = matrix
 
     def __init__(self, zero: float = 0.0):
-        pass
-
+        if isinstance(zero,(float,int)):
+            super().__init__(self,zero)
+        raise ValueError
+        
     def __copy__(self):
         pass
 
