@@ -23,22 +23,22 @@ class MatrixSparseDOK(MatrixSparse):
     def __next__(self):
         pass
 
-    def __getitem__(self, pos: [Position, position]) -> float:
+    def __getitem__(self, pos: Union[Position, position]) -> float:
         pass
 
-    def __setitem__(self, pos: [Position, position], val: [int, float]):
+    def __setitem__(self, pos: Union[Position, position], val: Union[int, float]):
         pass
 
     def __len__(self) -> int:
         pass
 
-    def _add_number(self, other: [int, float]) -> Matrix:
+    def _add_number(self, other: Union[int, float]) -> Matrix:
         pass
 
     def _add_matrix(self, other: MatrixSparse) -> MatrixSparse:
         pass
 
-    def _mul_number(self, other: [int, float]) -> Matrix:
+    def _mul_number(self, other: Union[int, float]) -> Matrix:
         pass
 
     def _mul_matrix(self, other: MatrixSparse) -> MatrixSparse:
