@@ -21,23 +21,28 @@ class MatrixSparseDOK(MatrixSparse):
     def __eq__(self, other: MatrixSparseDOK):
         return self._items == other._items
 
+    # Cria objeto iteravel
     def __iter__(self):
-        #TODO: RUI OU DIOGO
-        pass
+        self.current_index = 0
+        return self._items
 
+    # Próximo elemento do iterador
     def __next__(self):
-        #TODO: RUI OU DIOGO
-        pass
+        if(self.current_index < len(self._items)):
+            value = self._items[self.current_index]
+            self.current_index += 1
+            return value
+        raise StopIteration
 
-    def __getitem__(self, pos: [Position, position]) -> float:
+
+    def __getitem__(self, pos: Union[Position, position]) -> float:
         return self._items[pos]
 
-    def __setitem__(self, pos: [Position, position], val: [int, float]):
+    def __setitem__(self, pos: Union[Position, position], val: Union[int, float]):
         self._items[pos] = val
 
     def __len__(self) -> int:
         return len(self._items)
-        pass
 
     def _add_number(self, other: Union[int, float]) -> Matrix:
         #TODO:RICARDO
@@ -45,15 +50,15 @@ class MatrixSparseDOK(MatrixSparse):
         pass
 
     def _add_matrix(self, other: MatrixSparse) -> MatrixSparse:
-        #TODO:RICARDO
+        #TODO: RICARDO
         pass
 
-    def _mul_number(self, other: [int, float]) -> Matrix:
-        #TODO:RICARDO
+    def _mul_number(self, other: Union[int, float]) -> Matrix:
+        #TODO: RICARDO
         pass
 
     def _mul_matrix(self, other: MatrixSparse) -> MatrixSparse:
-        #TODO:RUI
+        #TODO: RUI
         pass
 
     def dim(self) -> tuple[Position, ...]:
@@ -65,11 +70,11 @@ class MatrixSparseDOK(MatrixSparse):
         pass
 
     def col(self, col: int) -> Matrix:
-        #TODO:DIOGO
+        #TODO: DIOGO
         pass
 
     def diagonal(self) -> Matrix:
-        #TODO:DIOGO
+        #TODO: DIOGO
         pass
 
     @staticmethod
@@ -93,3 +98,4 @@ class MatrixSparseDOK(MatrixSparse):
     def decompress(compressed_vector: compressed) -> MatrixSparse:
         #TODO: RUI
         pass
+
