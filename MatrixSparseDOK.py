@@ -5,7 +5,6 @@ from Position import *
 
 matrix = dict[Position, float]
 
-
 class MatrixSparseDOK(MatrixSparse):
     _items = matrix
 
@@ -33,7 +32,6 @@ class MatrixSparseDOK(MatrixSparse):
             self.current_index += 1
             return value
         raise StopIteration
-
 
     def __getitem__(self, pos: Union[Position, position]) -> float:
         return self._items[pos]
