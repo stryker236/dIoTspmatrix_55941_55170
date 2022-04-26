@@ -8,14 +8,18 @@ class MatrixSparse(Matrix):
     _zero = float
 
     def __init__(self, zero):
-        pass
+        self._zero = zero
 
+    #TODO: Ver como funciona
     @property
     def zero(self) -> float:
+        #TODO: RICARDO
         pass
 
+    #TODO: Ver como funciona
     @zero.setter
     def zero(self, val: float):
+        #TODO: RICARDO
         pass
 
     @abstractmethod
@@ -23,6 +27,7 @@ class MatrixSparse(Matrix):
         raise NotImplementedError
 
     def sparsity(self) -> float:
+        #TODO: DIOGO
         pass
 
     @staticmethod

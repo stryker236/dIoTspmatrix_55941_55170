@@ -60,6 +60,9 @@ class Matrix(ABC):
         raise NotImplementedError
 
     def __str__(self):
+        #Unico a ser implementado
+        #TODO: iterar pelo dicionario todo usando __iter__, __next__, dim,ecolher format i guess
+        #TODO: Rui
         pass
 
     @abstractmethod
