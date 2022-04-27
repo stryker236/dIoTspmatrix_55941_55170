@@ -8,8 +8,14 @@ d = {
     (1,1):3
 }
 
-d += 1
-print(d)
+aux = {("ola",1):1}
+for k,v in aux.items():
+    print(type(k))
+    print(type(v))
+
+# aux = (1,1,1)
+# a,b,c,d = aux
+# print(a,b,c)
 
 # aux = iter(d)
 # print(aux)
@@ -20,8 +26,8 @@ print(d)
 # print(next(aux))
 # print(next(aux))
 
-
-aux = sorted(d)
-print(d)
-print(aux)
-print(type(aux))
+'''Testagem do sorted'''
+# aux = sorted(d)
+# print(d)
+# print(aux)
+# print(type(aux))

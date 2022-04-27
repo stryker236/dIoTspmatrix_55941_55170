@@ -95,6 +95,7 @@ class MatrixSparseDOK(MatrixSparse):
             for key, value in self._items:
                 if(key[0] == row):
                     aux[key] = value
+            # Não sei exatamente o retornar
             return aux
 
     def col(self, col: int) -> Matrix:
@@ -103,6 +104,7 @@ class MatrixSparseDOK(MatrixSparse):
             for key, value in self._items:
                 if(key[1] == col):
                     aux[key] = value
+            # Não sei exatamente o retornar
             return aux
 
     def diagonal(self) -> Matrix:
@@ -110,6 +112,7 @@ class MatrixSparseDOK(MatrixSparse):
         for key, value in self._items:
             if(key[0] == key[1]):
                 aux[key] = value
+        # Não sei exatamente o retornar
         return aux
 
     @staticmethod
@@ -117,10 +120,27 @@ class MatrixSparseDOK(MatrixSparse):
         pass
 
     def transpose(self) -> MatrixSparseDOK:
-        #TODO: DIOGO
-        pass
+        aux = {}
+        for key, value in self._items.items():
+            aux[(key[1],key[0])] = value
+        # Não sei exatamente o retornar
+        return aux 
 
     def compress(self) -> compressed:
+        # primeiro temos que saber qual é o upper corner(dim)
+        upper_left, bottom_right = self.dim()
+        min_row,min_col = upper_left
+        max_row,max_col = bottom_right
+        # segundo tempo ques saber qual é o zero
+        zero = self.zero
+        values = []
+        indexes = []
+        offsets = []
+        # terceiro começar a fazer a contagem dos vetores
+        for x in range(max_row + 1):
+            for y in range(max_col + 1):
+
+            
         #TODO: RUI
         pass
 

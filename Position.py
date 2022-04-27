@@ -20,7 +20,10 @@ class Position:
         return hash(self._pos)
 
     def __getitem__(self, item: int) -> int:
-        return self._pos
+        # Nao sei o que acontece se se pedir um indice inválido
+        if isinstance(item,int):
+            return self._pos[item]
 
     def __eq__(self, other: Position):
-        return self._pos == other._pos
+        if isinstance(other,Position):
+            return self._pos == other._pos
