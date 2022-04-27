@@ -53,8 +53,16 @@ class MatrixSparseDOK(MatrixSparse):
                 self._items[key] += other
 
     def _add_matrix(self, other: MatrixSparse) -> MatrixSparse:
-        #TODO: Diogo
-        pass
+        dim1 = self.dim(self)
+        dim2 = self.dim(other)
+        if((dim1[0][0] == dim2[1][0]) and (dim1[0][1] == dim2[1][1])):
+            iter1 = iter(self._items)
+            iter2 = iter(other._items)
+            iter1 = iter1 + iter2
+            next(iter1)
+            next(iter2)
+        else:
+            raise ValueError
 
     def _mul_number(self, other: Union[int, float]) -> Matrix:
         if isinstance(other, (int, float)):
