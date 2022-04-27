@@ -55,12 +55,23 @@ class MatrixSparseDOK(MatrixSparse):
     def _add_matrix(self, other: MatrixSparse) -> MatrixSparse:
         dim1 = self.dim(self)
         dim2 = self.dim(other)
+        iter1 = iter(self)
+        iter2 = iter(other)
         if((dim1[0][0] == dim2[1][0]) and (dim1[0][1] == dim2[1][1])):
-            iter1 = iter(self._items)
-            iter2 = iter(other._items)
-            iter1 = iter1 + iter2
-            next(iter1)
-            next(iter2)
+            while True:
+                if iter1 == iter2:
+                    iter1._items = iter1._items + iter2._items
+                    try:
+                        next(iter1)
+                    except:
+                        break
+                    iter2.current_index = 0
+                else:
+                    try:
+                        next(iter2)
+                    except:
+                        iter2.current_index = 0
+                        continue
         else:
             raise ValueError
 
