@@ -10,17 +10,15 @@ class MatrixSparse(Matrix):
     def __init__(self, zero):
         self._zero = zero
 
-    #TODO: Ver como funciona
     @property
     def zero(self) -> float:
-        #TODO: RICARDO
-        pass
+        return self._zero
 
     #TODO: Ver como funciona
     @zero.setter
     def zero(self, val: float):
-        #TODO: RICARDO
-        pass
+        self._zero = val
+        #ainda falta eliminar os zeros que ficaram a mais no dicionario
 
     @abstractmethod
     def __len__(self) -> int:

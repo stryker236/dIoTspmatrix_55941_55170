@@ -63,6 +63,7 @@ class Matrix(ABC):
         #Unico a ser implementado
         #TODO: iterar pelo dicionario todo usando __iter__, __next__, dim,ecolher format i guess
         #TODO: Rui
+        # Deixar para ultimo porque ainda nao sei de todas a limitações
         pass
 
     @abstractmethod
