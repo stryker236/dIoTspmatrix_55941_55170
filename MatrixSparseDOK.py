@@ -11,7 +11,7 @@ class MatrixSparseDOK(MatrixSparse):
 
     def __init__(self, zero: float = 0.0):
         if isinstance(zero, (float, int)):
-            super().__init__(self, zero)
+            super().__init__(zero)
             self._items = {}
         raise ValueError
 
