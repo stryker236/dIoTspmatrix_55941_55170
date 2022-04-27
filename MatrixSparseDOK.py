@@ -34,7 +34,8 @@ class MatrixSparseDOK(MatrixSparse):
         if(self.current_index < self.max):
             value = self._items[self.iter_aux[self.current_index]]
             self.current_index += 1
-            return value
+            return 
+        # Não sei se é suposto fazer raise
         raise StopIteration
 
     def __getitem__(self, pos: Union[Position, position]) -> float:
@@ -52,7 +53,7 @@ class MatrixSparseDOK(MatrixSparse):
                 self._items[key] += other
 
     def _add_matrix(self, other: MatrixSparse) -> MatrixSparse:
-        #TODO: RICARDO
+        #TODO: Diogo
         pass
 
     def _mul_number(self, other: Union[int, float]) -> Matrix:
@@ -61,7 +62,7 @@ class MatrixSparseDOK(MatrixSparse):
                 self._items[key] *= other
 
     def _mul_matrix(self, other: MatrixSparse) -> MatrixSparse:
-        #TODO: RUI
+        #TODO: DIOGO
         pass
 
     def dim(self) -> tuple[Position, ...]:
@@ -126,6 +127,7 @@ class MatrixSparseDOK(MatrixSparse):
         # Não sei exatamente o retornar
         return aux 
 
+    # TODO: Rui
     def compress(self) -> compressed:
         # primeiro temos que saber qual é o upper corner(dim)
         upper_left, bottom_right = self.dim()
@@ -139,10 +141,8 @@ class MatrixSparseDOK(MatrixSparse):
         # terceiro começar a fazer a contagem dos vetores
         for x in range(max_row + 1):
             for y in range(max_col + 1):
-
-            
-        #TODO: RUI
-        pass
+                # Aqui seria o loop da compressao propriamente dita
+                pass
 
     @staticmethod
     def doi(compressed_vector: compressed, pos: Position) -> float:

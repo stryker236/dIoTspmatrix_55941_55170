@@ -10,7 +10,6 @@ class MatrixSparse(Matrix):
     def __init__(self, zero):
         self._zero = zero
 
-    #TODO: Ver como funciona
     @property
     def zero(self) -> float:
         return self._zero
