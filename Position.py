@@ -14,7 +14,7 @@ class Position:
         return str(self._pos)
 
     def __repr__(self):
-        return str(self._pos)
+        return self.__str__()
 
     def __hash__(self):
         return hash(self._pos)
