@@ -1,5 +1,6 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
+from operator import ne
 from Position import *
 
 class Matrix(ABC):
@@ -59,11 +60,29 @@ class Matrix(ABC):
         raise NotImplementedError
 
     def __str__(self):
-        #Unico a ser implementado
-        #TODO: iterar pelo dicionario todo usando __iter__, __next__, dim,ecolher format i guess
-        #TODO: Rui
-        # Deixar para ultimo porque ainda nao sei de todas a limitações
-        pass
+        string = ""
+        d = self.dim()
+        if len(d) == 2:
+            up_left, down_right = d
+            row_min = up_left[0]
+            col_min = up_left[1]
+            row_max = down_right[0]
+            col_max = down_right[1]
+
+            for x in range(row_min,row_max+1):
+                for y in range(col_min,col_max+1):
+                    #Caso o numero que for retornado seja um inteiro apresentalo como inteiro
+                    if float(self[Position(x,y)]).is_integer():
+                        string += str(int(self[Position(x,y)]))
+                    else:
+                        string += str(self[Position(x,y)])
+                    #Nao colocar espaço no ultimo elemento de cada linha
+                    if y != col_max:
+                        string += " "
+                #Não colocar \n no ultimo elemente da ultima linha
+                if x != row_max:
+                    string += "\n"
+        return string
 
     @abstractmethod
     def dim(self) -> tuple[Position, ...]:

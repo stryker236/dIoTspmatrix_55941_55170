@@ -1,4 +1,5 @@
 from __future__ import annotations
+from cmath import isfinite
 from ctypes import Union
 from MatrixSparse import *
 from Position import *
@@ -10,13 +11,18 @@ class MatrixSparseDOK(MatrixSparse):
     _items = matrix
 
     def __init__(self, zero: float = 0.0):
-        if isinstance(zero, (float, int)):
-            super().__init__(zero)
-            self._items = {}
-        raise ValueError
+        # print(zero)
+        # print(type(zero))
+        if not isinstance(zero, (float, int)):
+            raise ValueError("__init__() invalid arguments")
+        super().__init__(zero)
+        self._items = {}
 
     def __copy__(self):
-        return {key: value for key, value in self._items.items()}
+        aux = MatrixSparseDOK(self.zero)
+        for key,value in self._items:
+            aux[key]=value
+        return aux
 
     def __eq__(self, other: MatrixSparseDOK):
         return self._items == other._items
@@ -25,24 +31,73 @@ class MatrixSparseDOK(MatrixSparse):
     def __iter__(self):
         self.current_index = 0
         self.max = len(self._items)
-        self.iter_aux = sorted(self._items)
+        # lista de key value pair do dicionario
+        self.iter_aux = list(self._items.items())
         # Não sei se retornar o proprio objeto é a melhor forma de lidar
         return self
 
     # Próximo elemento do iterador
     def __next__(self):
         if(self.current_index < self.max):
-            value = self._items[self.iter_aux[self.current_index]]
+            # print("Current iteration value: ", self.current_index)
+            key,value = self.iter_aux[self.current_index]
             self.current_index += 1
-            return 
+            return (key,value)
         # Não sei se é suposto fazer raise
-        raise StopIteration
+        return (None,None)
 
     def __getitem__(self, pos: Union[Position, position]) -> float:
-        return self._items[pos]
+
+        if isinstance(pos,Position):
+            return self._items[pos] if pos in self._items else self.zero
+        if isinstance(pos,tuple) and len(pos) == 2:
+             if isinstance(pos[0],int) and isinstance(pos[1],int):
+                 if pos[0] >= 0 and pos[1] >= 0:
+                    print("position")
+                    return self._items[Position(pos[0],pos[1])] if Position(pos[0],pos[1]) in self._items else self.zero
+        raise ValueError("__getitem__() invalid arguments")
 
     def __setitem__(self, pos: Union[Position, position], val: Union[int, float]):
-        self._items[pos] = val
+        if isinstance(val,(float,int)) and isinstance(pos,(Position,tuple)):
+            if isinstance(pos, Position):
+                if val != self.zero:
+                    self._items[pos] = val
+                elif pos in self._items:
+                    del self._items[pos]
+            elif isinstance(pos, tuple) and len(pos) == 2 and isinstance(pos[0],int) and isinstance(pos[1],int) and pos[0] >= 0 and pos[1] >= 0:
+                if val != self.zero:
+                    self._items[Position(pos[0],pos[1])] = val
+                elif Position(pos[0],pos[1]) in self._items:
+                    del self._items[Position(pos[0],pos[1])]
+            else:
+                raise ValueError("__setitem__() invalid arguments")
+        else:
+            raise ValueError("__setitem__() invalid arguments")
+        # if isinstance(val,(float,int)):
+        #     if val != self.zero:
+        #         if isinstance(pos,Position):
+        #             self._items[pos] = val
+        #         if isinstance(pos,tuple):
+        #             if isinstance(pos[0],int) and isinstance(pos[1],int):
+        #                 if pos[0] >= 0 and pos[1] >= 0:
+        #                     self._items[Position(pos[0],pos[1])] = val     
+        #                 else:
+        #                     raise ValueError("__setitem__() invalid arguments")  
+        #     else:
+        #         if isinstance(pos,Position):
+        #             if pos in self._items:
+        #                 del self._items[pos]
+        #         if isinstance(pos,tuple):
+        #             if Position(pos[0],pos[1]) in self._items:
+        #                 if isinstance(pos[0],int) and isinstance(pos[1],int):
+        #                     if pos[0] >= 0 and pos[1] >= 0:
+        #                         del self._items[Position(pos[0],pos[1])]   
+        #                     else:
+        #                         raise ValueError("__setitem__() invalid arguments")  
+        # else:
+        #     raise ValueError("__setitem__() invalid arguments")  
+
+
 
     def __len__(self) -> int:
         return len(self._items)
@@ -67,11 +122,12 @@ class MatrixSparseDOK(MatrixSparse):
 
     def dim(self) -> tuple[Position, ...]:
         # lista apenas de positions
-        positions = sorted(self._items)
         # tem que ser spmatrix
         # se posiçoes na matrix
 
         if bool(self._items):
+            positions = list(self._items)
+            
             # nao sei se aceder às linhas e às colunas resulta
             min_row = positions[0][0]
             max_col = positions[0][1]
@@ -86,34 +142,31 @@ class MatrixSparseDOK(MatrixSparse):
                     max_col = pos[1]
                 if pos[1] < min_col:
                     min_col = pos[1]
-            return ((min_row, min_col), (max_row, max_col))
+            return (Position(min_row, min_col), Position(max_row, max_col))
         return ()
     
 
     def row(self, row: int) -> Matrix:
-        aux = {}
+        aux = MatrixSparseDOK(self.zero)
         if isinstance(row,int):
-            for key, value in self._items:
+            for key, value in self._items.items():
                 if(key[0] == row):
                     aux[key] = value
-            # Não sei exatamente o retornar
             return aux
 
     def col(self, col: int) -> Matrix:
-        aux = {}
+        aux = MatrixSparseDOK(self.zero)
         if isinstance(col,int):
-            for key, value in self._items:
+            for key, value in self._items.items():
                 if(key[1] == col):
                     aux[key] = value
-            # Não sei exatamente o retornar
             return aux
 
     def diagonal(self) -> Matrix:
-        aux = {}
-        for key, value in self._items:
-            if(key[0] == key[1]):
+        aux = MatrixSparseDOK(self.zero)
+        for key, value in self._items.items():
+            if(key[1] == key[0]):
                 aux[key] = value
-        # Não sei exatamente o retornar
         return aux
 
     @staticmethod

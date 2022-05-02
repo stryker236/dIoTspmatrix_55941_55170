@@ -8,7 +8,8 @@ class Position:
         if isinstance(row,(float,int)) and isinstance(col,(float,int)):
             if col >= 0 and row >= 0:
                 self._pos = (row,col)
-        raise ValueError
+        else:
+            raise ValueError
 
     def __str__(self):
         return str(self._pos)

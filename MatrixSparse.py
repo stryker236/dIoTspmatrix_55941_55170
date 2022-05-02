@@ -17,7 +17,16 @@ class MatrixSparse(Matrix):
     #TODO: Ver como funciona
     @zero.setter
     def zero(self, val: float):
-        self._zero = val
+        iter(self)
+        key, value = next(self)
+
+        if isinstance(val,(int,float)):
+            self._zero = val
+
+        while((key,value) != (None,None)):
+            if(value == val):
+                del self._items[key]
+                key,value = next(self)
         #ainda falta eliminar os zeros que ficaram a mais no dicionario
 
     @abstractmethod
