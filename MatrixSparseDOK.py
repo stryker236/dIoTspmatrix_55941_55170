@@ -1,5 +1,4 @@
 from __future__ import annotations
-from cmath import isfinite
 from ctypes import Union
 from MatrixSparse import *
 from Position import *
@@ -20,8 +19,9 @@ class MatrixSparseDOK(MatrixSparse):
 
     def __copy__(self):
         aux = MatrixSparseDOK(self.zero)
-        for key,value in self._items:
-            aux[key]=value
+        for key,value in self._items.items():
+            aux[key] = value
+        print("retornando uma cópia da matriz")
         return aux
 
     def __eq__(self, other: MatrixSparseDOK):
@@ -34,7 +34,7 @@ class MatrixSparseDOK(MatrixSparse):
         # lista de key value pair do dicionario
         self.iter_aux = list(self._items.items())
         # Não sei se retornar o proprio objeto é a melhor forma de lidar
-        return self
+        return self.__copy__()
 
     # Próximo elemento do iterador
     def __next__(self):
@@ -44,7 +44,7 @@ class MatrixSparseDOK(MatrixSparse):
             self.current_index += 1
             return (key,value)
         # Não sei se é suposto fazer raise
-        return (None,None)
+        return ()
 
     def __getitem__(self, pos: Union[Position, position]) -> float:
 
@@ -73,39 +73,16 @@ class MatrixSparseDOK(MatrixSparse):
                 raise ValueError("__setitem__() invalid arguments")
         else:
             raise ValueError("__setitem__() invalid arguments")
-        # if isinstance(val,(float,int)):
-        #     if val != self.zero:
-        #         if isinstance(pos,Position):
-        #             self._items[pos] = val
-        #         if isinstance(pos,tuple):
-        #             if isinstance(pos[0],int) and isinstance(pos[1],int):
-        #                 if pos[0] >= 0 and pos[1] >= 0:
-        #                     self._items[Position(pos[0],pos[1])] = val     
-        #                 else:
-        #                     raise ValueError("__setitem__() invalid arguments")  
-        #     else:
-        #         if isinstance(pos,Position):
-        #             if pos in self._items:
-        #                 del self._items[pos]
-        #         if isinstance(pos,tuple):
-        #             if Position(pos[0],pos[1]) in self._items:
-        #                 if isinstance(pos[0],int) and isinstance(pos[1],int):
-        #                     if pos[0] >= 0 and pos[1] >= 0:
-        #                         del self._items[Position(pos[0],pos[1])]   
-        #                     else:
-        #                         raise ValueError("__setitem__() invalid arguments")  
-        # else:
-        #     raise ValueError("__setitem__() invalid arguments")  
-
-
 
     def __len__(self) -> int:
         return len(self._items)
 
     def _add_number(self, other: Union[int, float]) -> Matrix:
         if isinstance(other, (int, float)):
-            for key in self._items:
-                self._items[key] += other
+            aux = self.__copy__()
+            for key,value in self._items.items():
+                aux[key] += other
+            return aux
 
     def _add_matrix(self, other: MatrixSparse) -> MatrixSparse:
         #TODO: Diogo
@@ -113,8 +90,10 @@ class MatrixSparseDOK(MatrixSparse):
 
     def _mul_number(self, other: Union[int, float]) -> Matrix:
         if isinstance(other, (int, float)):
+            aux = self.__copy__()
             for key in self._items:
-                self._items[key] *= other
+                aux[key] *= other
+            return aux
 
     def _mul_matrix(self, other: MatrixSparse) -> MatrixSparse:
         #TODO: DIOGO
@@ -127,12 +106,10 @@ class MatrixSparseDOK(MatrixSparse):
 
         if bool(self._items):
             positions = list(self._items)
-            
-            # nao sei se aceder às linhas e às colunas resulta
             min_row = positions[0][0]
-            max_col = positions[0][1]
-            max_row = positions[0][0]
             min_col = positions[0][1]
+            max_row = positions[0][0]
+            max_col = positions[0][1]
             for pos in positions:
                 if pos[0] > max_row:
                     max_row = pos[0]
@@ -174,7 +151,7 @@ class MatrixSparseDOK(MatrixSparse):
         pass
 
     def transpose(self) -> MatrixSparseDOK:
-        aux = {}
+        aux = MatrixSparseDOK(self.zero)
         for key, value in self._items.items():
             aux[(key[1],key[0])] = value
         # Não sei exatamente o retornar

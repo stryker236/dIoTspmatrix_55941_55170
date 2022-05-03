@@ -28,3 +28,5 @@ class Position:
     def __eq__(self, other: Position):
         if isinstance(other,Position):
             return self._pos == other._pos
+        return False
+        

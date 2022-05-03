@@ -18,24 +18,33 @@ class MatrixSparse(Matrix):
     @zero.setter
     def zero(self, val: float):
         iter(self)
-        key, value = next(self)
+        elem = next(self)
 
         if isinstance(val,(int,float)):
             self._zero = val
 
-        while((key,value) != (None,None)):
-            if(value == val):
+        while not (elem == ()):
+            key, value = elem
+            if(value == self._zero):
                 del self._items[key]
-                key,value = next(self)
-        #ainda falta eliminar os zeros que ficaram a mais no dicionario
+            elem = next(self)
 
     @abstractmethod
     def __len__(self) -> int:
         raise NotImplementedError
 
     def sparsity(self) -> float:
-        #TODO: DIOGO
-        pass
+        positions = self.dim()
+        if bool(self._items):
+            min_row = positions[0][0]
+            min_col = positions[0][1]
+            max_row = positions[1][0]
+            max_col = positions[1][1]
+            total_elem = (max_col-min_col+1)*(max_row-min_row+1)
+            zero_null = total_elem - len(self._items)
+            return zero_null/float(total_elem)
+        else:
+            return 1.0
 
     @staticmethod
     @abstractmethod
