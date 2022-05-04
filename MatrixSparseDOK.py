@@ -1,5 +1,5 @@
 from __future__ import annotations
-from ctypes import Union
+from operator import getitem
 from MatrixSparse import *
 from Position import *
 
@@ -81,15 +81,30 @@ class MatrixSparseDOK(MatrixSparse):
                 self._items[key] *= other
 
     def _mul_matrix(self, other: MatrixSparse) -> MatrixSparse:
-        #TODO: DIOGO
-        pass
+        dim1 = self.dim(self)
+        dim2 = self.dim(other)
+        dim1_length = (dim1[1][1] - dim1[0][1]) + 1
+        dim1_height = (dim1[1][0] - dim1[0][0]) + 1
+        dim2_length = (dim2[1][1] - dim2[0][1]) + 1
+        dim2_height = (dim2[1][0] - dim2[0][0]) + 1
+        result = MatrixSparseDOK()
+
+        if((dim1_length != dim2_height) or (self.zero != other.zero)):
+            raise ValueError
+        else:
+            result = MatrixSparseDOK(self.zero)
+            for x in dim1_height:
+                for y in dim2_length:
+                    for k in dim2_height:
+                        result[x][y] += self[x, k] * other[k, y]
+        return result
 
     def dim(self) -> tuple[Position, ...]:
         # lista apenas de positions
         positions = sorted(self._items)
         # tem que ser spmatrix
         # se posiçoes na matrix
-
+    
         if bool(self._items):
             # nao sei se aceder às linhas e às colunas resulta
             min_row = positions[0][0]
