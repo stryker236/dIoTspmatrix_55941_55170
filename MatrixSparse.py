@@ -19,8 +19,8 @@ class MatrixSparse(Matrix):
     def zero(self, val: float):
         if isinstance(val,(int,float)):
             self._zero = val
-        for key,value in self:
-            if(value == self._zero):
+        for key in self:
+            if(self[key] == self._zero):
                 del self._items[key]
 
     @abstractmethod

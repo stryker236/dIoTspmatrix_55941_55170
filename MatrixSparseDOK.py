@@ -19,30 +19,33 @@ class MatrixSparseDOK(MatrixSparse):
 
     def __copy__(self):
         aux = MatrixSparseDOK(self.zero)
-        for key,value in self:
-            aux[key] = value
+        for key in self:
+            aux[key] = self[key]
         print("retornando uma cópia da matriz")
         return aux
 
     def __eq__(self, other: MatrixSparseDOK):
-        return self._items == other._items
+        if isinstance(other,MatrixSparseDOK):
+            return self._items == other._items
 
     # Cria objeto iteravel
     def __iter__(self):
         self.current_index = 0
         self.max = len(self._items)
-        self.iter_aux = list(self._items.items())
+        self.iter_aux = sorted(list(self._items))
+        print("iter sorted",self.iter_aux)
         # Não sei se retornar o proprio objeto é a melhor forma de lidar
         # return self._items.items()
         return self
+
 
     # Próximo elemento do iterador
     def __next__(self):
         if(self.current_index < self.max):
             # print("Current iteration value: ", self.current_index)
-            key,value = self.iter_aux[self.current_index]
+            key = self.iter_aux[self.current_index]
             self.current_index += 1
-            return (key,value)
+            return key
         else:
             raise StopIteration
 
@@ -80,7 +83,7 @@ class MatrixSparseDOK(MatrixSparse):
     def _add_number(self, other: Union[int, float]) -> Matrix:
         if isinstance(other, (int, float)):
             aux = self.__copy__()
-            for key,value in self._items.items():
+            for key in self:
                 aux[key] += other
             return aux
 
@@ -91,7 +94,7 @@ class MatrixSparseDOK(MatrixSparse):
     def _mul_number(self, other: Union[int, float]) -> Matrix:
         if isinstance(other, (int, float)):
             aux = self.__copy__()
-            for key in self._items:
+            for key in self:
                 aux[key] *= other
             return aux
 
@@ -126,24 +129,24 @@ class MatrixSparseDOK(MatrixSparse):
     def row(self, row: int) -> Matrix:
         aux = MatrixSparseDOK(self.zero)
         if isinstance(row,int):
-            for key, value in self._items.items():
+            for key in self:
                 if(key[0] == row):
-                    aux[key] = value
+                    aux[key] = self[key]
             return aux
 
     def col(self, col: int) -> Matrix:
         aux = MatrixSparseDOK(self.zero)
         if isinstance(col,int):
-            for key, value in self._items.items():
+            for key in self:
                 if(key[1] == col):
-                    aux[key] = value
+                    aux[key] = self[key]
             return aux
 
     def diagonal(self) -> Matrix:
         aux = MatrixSparseDOK(self.zero)
-        for key, value in self._items.items():
+        for key in self:
             if(key[1] == key[0]):
-                aux[key] = value
+                aux[key] = self[key]
         return aux
 
     @staticmethod
@@ -152,8 +155,8 @@ class MatrixSparseDOK(MatrixSparse):
 
     def transpose(self) -> MatrixSparseDOK:
         aux = MatrixSparseDOK(self.zero)
-        for key, value in self._items.items():
-            aux[(key[1],key[0])] = value
+        for key in self:
+            aux[(key[1],key[0])] = self[key]
         # Não sei exatamente o retornar
         return aux 
 

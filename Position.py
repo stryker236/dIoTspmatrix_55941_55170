@@ -29,4 +29,13 @@ class Position:
         if isinstance(other,Position):
             return self._pos == other._pos
         return False
+    
+    def __lt__(self,other):
+        if isinstance(other,Position):
+            if self[0] < other[0]:
+                return True
+            elif self[0] == other[0]:
+                if self[1] < other[1]:
+                    return True
+            return False
         
