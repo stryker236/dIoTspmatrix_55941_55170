@@ -19,7 +19,7 @@ class MatrixSparseDOK(MatrixSparse):
 
     def __copy__(self):
         aux = MatrixSparseDOK(self.zero)
-        for key,value in self._items.items():
+        for key,value in self:
             aux[key] = value
         print("retornando uma cópia da matriz")
         return aux
@@ -31,10 +31,10 @@ class MatrixSparseDOK(MatrixSparse):
     def __iter__(self):
         self.current_index = 0
         self.max = len(self._items)
-        # lista de key value pair do dicionario
         self.iter_aux = list(self._items.items())
         # Não sei se retornar o proprio objeto é a melhor forma de lidar
-        return self.__copy__()
+        # return self._items.items()
+        return self
 
     # Próximo elemento do iterador
     def __next__(self):
@@ -43,8 +43,8 @@ class MatrixSparseDOK(MatrixSparse):
             key,value = self.iter_aux[self.current_index]
             self.current_index += 1
             return (key,value)
-        # Não sei se é suposto fazer raise
-        return ()
+        else:
+            raise StopIteration
 
     def __getitem__(self, pos: Union[Position, position]) -> float:
 

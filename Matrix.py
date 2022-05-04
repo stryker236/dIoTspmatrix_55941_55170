@@ -63,11 +63,8 @@ class Matrix(ABC):
         d = self.dim()
         if len(d) == 2:
             up_left, down_right = d
-            row_min = up_left[0]
-            col_min = up_left[1]
-            row_max = down_right[0]
-            col_max = down_right[1]
-
+            row_min,col_min = up_left
+            row_max,col_max = down_right
             for x in range(row_min,row_max+1):
                 for y in range(col_min,col_max+1):
                     #Caso o numero que for retornado seja um inteiro apresentalo como inteiro

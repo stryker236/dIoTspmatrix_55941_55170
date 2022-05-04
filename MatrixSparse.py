@@ -17,17 +17,11 @@ class MatrixSparse(Matrix):
     #TODO: Ver como funciona
     @zero.setter
     def zero(self, val: float):
-        iter(self)
-        elem = next(self)
-
         if isinstance(val,(int,float)):
             self._zero = val
-
-        while not (elem == ()):
-            key, value = elem
+        for key,value in self:
             if(value == self._zero):
                 del self._items[key]
-            elem = next(self)
 
     @abstractmethod
     def __len__(self) -> int:
@@ -36,10 +30,8 @@ class MatrixSparse(Matrix):
     def sparsity(self) -> float:
         positions = self.dim()
         if bool(self._items):
-            min_row = positions[0][0]
-            min_col = positions[0][1]
-            max_row = positions[1][0]
-            max_col = positions[1][1]
+            min_row,min_col = positions[0]
+            max_row,max_col = positions[1]
             total_elem = (max_col-min_col+1)*(max_row-min_row+1)
             zero_null = total_elem - len(self._items)
             return zero_null/float(total_elem)
