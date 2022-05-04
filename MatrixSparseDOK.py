@@ -1,5 +1,3 @@
-from __future__ import annotations
-from operator import getitem
 from MatrixSparse import *
 from Position import *
 
@@ -55,23 +53,15 @@ class MatrixSparseDOK(MatrixSparse):
     def _add_matrix(self, other: MatrixSparse) -> MatrixSparse:
         dim1 = self.dim(self)
         dim2 = self.dim(other)
-        iter1 = iter(self)
-        iter2 = iter(other)
-        if((dim1[0][0] == dim2[1][0]) and (dim1[0][1] == dim2[1][1])):
-            while True:
-                if iter1 == iter2:
-                    iter1._items = iter1._items + iter2._items
-                    try:
-                        next(iter1)
-                    except:
-                        break
-                    iter2.current_index = 0
-                else:
-                    try:
-                        next(iter2)
-                    except:
-                        iter2.current_index = 0
-                        continue
+        dim1_length = (dim1[1][1] - dim1[0][1]) + 1
+        dim1_height = (dim1[1][0] - dim1[0][0]) + 1
+        dim2_length = (dim2[1][1] - dim2[0][1]) + 1
+        dim2_height = (dim2[1][0] - dim2[0][0]) + 1
+        
+        if((dim1_length == dim2_length) and (dim1_height == dim2_height)):
+            for x in dim1_height:
+                for y in dim1_length:
+                    self[x + dim1[0][0], y + dim1[0][0]] = self[x + dim1[0][0], y + dim1[0][1]] + other[x + dim2[0][0], y + dim2[0][1]]
         else:
             raise ValueError
 
@@ -96,7 +86,7 @@ class MatrixSparseDOK(MatrixSparse):
             for x in dim1_height:
                 for y in dim2_length:
                     for k in dim2_height:
-                        result[x][y] += self[x, k] * other[k, y]
+                        result[x + dim1[0][0]][y + dim1[0][0]] += self[x + dim1[0][0], k + dim1[0][1]] * other[k + dim1[0][0], y + dim1[0][1]]
         return result
 
     def dim(self) -> tuple[Position, ...]:
