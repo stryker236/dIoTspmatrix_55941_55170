@@ -95,13 +95,7 @@ class MatrixSparseDOK(MatrixSparse):
         if((dim1_length == dim2_length) and (dim1_height == dim2_height) and self.zero == other.zero):
             aux = MatrixSparseDOK(self.zero)
             for x in range(dim1_height):
-                for y in range(dim1_length):
-                    # if (self[x + dim1[0][0], y + dim1[0][1]] == self.zero) or (other[x + dim2[0][0], y + dim2[0][1]] == other.zero):
-                    #     aux[x + dim1[0][0], y + dim1[0][1]] = self[x + dim1[0][0], y + dim1[0][1]] + other[x + dim2[0][0], y + dim2[0][1]] - self.zero
-                    #     # aux[x + dim2[0][0], y + dim2[0][1]] += other[x + dim2[0][0], y + dim2[0][1]] - other.zero
-                    # else:
-                    #     aux[x + dim1[0][0], y + dim1[0][1]] += self[x + dim1[0][0], y + dim1[0][1]]
-                    #     aux[x + dim2[0][0], y + dim2[0][1]] += other[x + dim2[0][0], y + dim2[0][1]]                   
+                for y in range(dim1_length):                 
                     if (self[x + dim1[0][0], y + dim1[0][1]] == self.zero):
                         pass
                     else:
@@ -112,7 +106,6 @@ class MatrixSparseDOK(MatrixSparse):
                     elif aux[x + dim2[0][0], y + dim2[0][1]] != other.zero:
                         aux[x + dim2[0][0], y + dim2[0][1]] += other[x + dim2[0][0], y + dim2[0][1]]
                     else:
-                        print("heyyyyyy gorada")
                         aux[x + dim2[0][0], y + dim2[0][1]] = other[x + dim2[0][0], y + dim2[0][1]]
 
 
@@ -129,22 +122,52 @@ class MatrixSparseDOK(MatrixSparse):
             return aux
 
     def _mul_matrix(self, other: MatrixSparse) -> MatrixSparse:
-        dim1 = self.dim(self)
-        dim2 = self.dim(other)
+        dim1 = self.dim()
+        dim2 = other.dim()
         dim1_length = (dim1[1][1] - dim1[0][1]) + 1
         dim1_height = (dim1[1][0] - dim1[0][0]) + 1
         dim2_length = (dim2[1][1] - dim2[0][1]) + 1
         dim2_height = (dim2[1][0] - dim2[0][0]) + 1
-        result = MatrixSparseDOK()
+        
+        max_row_1,max_col_1 = dim1[1]
+        max_row_2,max_col_2 = dim2[1]
+
+        min_row_1,min_col_1 = dim1[0]
+        min_row_2,min_col_2 = dim2[0]
+
+        max_row_considered = max_row_1 if max_row_1 > max_row_2 else max_row_2
+        max_col_considered = max_col_1 if max_col_1 > max_col_2 else max_col_2
+
+        min_row_considered = min_row_1 if min_row_1 < min_row_2 else min_row_2
+        min_col_considered = min_col_1 if min_col_1 < min_col_2 else min_col_2
+
+
+
+        
 
         if((dim1_length != dim2_height) or (self.zero != other.zero)):
-            raise ValueError
+
+            raise ValueError("_mul_matrix() incompatible matrices")
         else:
             result = MatrixSparseDOK(self.zero)
-            for x in dim1_height:
-                for y in dim2_length:
-                    for k in dim2_height:
-                        result[x + dim1[0][0]][y + dim1[0][0]] += self[x + dim1[0][0], k + dim1[0][1]] * other[k + dim1[0][0], y + dim1[0][1]]
+            for x in range(min_row_1, max_row_1 + 1):
+                print("Linha: ",x)
+                for y in range(min_col_2, max_col_2 + 1):
+                    print("Coluna: ", y)
+                    aux = 0
+                    for k in range(dim1_length):
+                        if self[(x,k+min_col_1)] != self.zero and other[(k+min_row_2,y)] != other.zero:
+                            print(self[(x,k+min_col_1)],"*",other[(k+min_row_2,y)],"=",self[(x,k+min_col_1)]*other[(k+min_row_2,y)])
+                            aux += self[(x,k+min_col_1)]*other[(k+min_row_2,y)]
+                            print("Total: ", aux)
+                            print()
+                            # result[x + dim1[0][0]][y + dim1[0][0]] += self[x + dim1[0][0], k + dim1[0][1]] * other[k + dim1[0][0], y + dim1[0][1]]
+                        else:
+                            print(self[(x,k+min_col_1)],"*",other[(k+min_row_2,y)],"=",self[(x,k+min_col_1)]*other[(k+min_row_2,y)])
+                            continue
+                    result[(x,y)] = aux
+                    print(result)
+                print("Result intermédio: ")
         return result
 
     def dim(self) -> tuple[Position, ...]:
@@ -196,7 +219,13 @@ class MatrixSparseDOK(MatrixSparse):
 
     @staticmethod
     def eye(size: int, unitary: float = 1.0, zero: float = 0.0) -> MatrixSparseDOK:
-        pass
+        if isinstance(size,int)  and isinstance(unitary,(int,float)) and isinstance(zero,(int,float)):
+            aux  = MatrixSparseDOK(zero)
+            if size >= 0:
+                for i in range(size):
+                    aux[Position(i,i)] = unitary
+                return aux
+        raise ValueError("eye() invalid parameters")
 
     def transpose(self) -> MatrixSparseDOK:
         aux = MatrixSparseDOK(self.zero)
@@ -323,16 +352,50 @@ class MatrixSparseDOK(MatrixSparse):
                     print()
             return ((min_row,min_col), self.zero, tuple(values), tuple(indexes), tuple(offsets))
         raise ValueError("compress() dense matrix")
+    
     @staticmethod
     def doi(compressed_vector: compressed, pos: Position) -> float:
-        #TODO: RUI
-        pass
-
+        if isinstance(compressed_vector,tuple) and isinstance(pos,Position):
+            upper_left, zero, values, indices, offsets = compressed_vector
+            if( isinstance(upper_left,tuple) and len(upper_left) == 2 and isinstance(zero,float) and isinstance(values,tuple) and isinstance(indices,tuple) and isinstance(offsets,tuple)):
+                min_row, min_col = upper_left
+                return values[pos[1] - min_col + offsets[pos[0]-min_row]] if indices[pos[1] - min_col + offsets[pos[0]-min_row]] == pos[0] else zero
+        raise ValueError("doi() invalid parameters")
     @staticmethod
     def decompress(compressed_vector: compressed) -> MatrixSparse:
-        if isinstance(compressed_vector,compressed):
+        if isinstance(compressed_vector,tuple):
+            
+            # tamanho dos offsets dao o numero de linhas,
+            # indices dão a colina
+            # offset dá 
             upper_left, zero, values, indices, offsets = compressed_vector
-            min_row,min_col = upper_left
-            aux = MatrixSparseDOK(zero)
-            for 
+            print("upper_left",upper_left)
+            print("zero",zero)
+            print("values",values)
+            print("indices",indices)
+            print("offsets",offsets)
+            print()
+            if( isinstance(upper_left,tuple) and len(upper_left) == 2 and 
+                isinstance(zero,float) and
+                isinstance(values,tuple) and 
+                isinstance(indices,tuple) and 
+                isinstance(offsets,tuple)):
+
+                min_row,min_col = upper_left
+                aux = MatrixSparseDOK(zero)
+
+                print("upper_left: ", upper_left)
+                gap = 0
+                for i,v in enumerate(values):
+                    if(indices[i] != -1):
+                        print("values: ",v)
+                        print("indice",indices[i])
+                        print("offset: ",offsets[indices[i] - min_row])
+                        print()
+                        aux[Position(indices[i],i + min_col - offsets[indices[i] - min_row])] = v
+                    else:
+                        gap += 1
+                            
+                return aux
+            raise ValueError("decompress() invalid parameters")
 
