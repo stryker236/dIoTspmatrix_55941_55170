@@ -1,3 +1,3 @@
 # dIoTspmatrix_55941
 
-trabalho de trabalho
+Trabalho realizado no âmbito da cadeira de DTSD (Desenvolvimento e teste de Sistemas digitais)
